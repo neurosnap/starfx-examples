@@ -13,7 +13,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
-    "starfx": "^0.0.4"
+    "starfx": "^1.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
