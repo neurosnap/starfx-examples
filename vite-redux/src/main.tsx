@@ -2,10 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 import { parallel, createQueryState } from "starfx";
-import { configureStore, take } from "starfx/store";
+import { configureStore, take } from "starfx/redux";
 import { Provider } from 'starfx/react';
 
-import { api } from "./api.ts";
+import { api, userReducer } from "./api.ts";
 import App from "./App.tsx";
 import "./index.css";
 import type { AppState } from "./types.ts";
@@ -17,18 +17,15 @@ async function init() {
     users: { 1: { id: "1", name: "eric" } },
     ...createQueryState(),
   };
-  const store = await configureStore({
+  const { store, fx } = configureStore({
     initialState,
-    middleware: [
-      function* logger(ctx, next) {
-        yield* next();
-        console.log("store updater", ctx);
-      },
-    ],
+    reducers: {
+      users: userReducer as any,
+    },
   });
-  (window as any).fx = store;
+  (window as any).reduxStore = store;
 
-  store.run(function* (): any {
+  fx.run(function* (): any {
     const group = yield* parallel([
       function* logger() {
         while (true) {

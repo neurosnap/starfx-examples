@@ -1,4 +1,4 @@
-import { createApi, fetcher, requestMonitor } from "starfx/query";
+import { createApi, fetcher, requestMonitor } from "starfx";
 import { createSelector, updateStore } from 'starfx/store';
 import { AppState, User } from "./types";
 
