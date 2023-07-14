@@ -35,10 +35,14 @@ export function selectUser(s: AppState, props: { id: string }) {
   return selectUserTable(s)[props.id];
 }
 
-export const fetchUsers = api.get<never, User[]>('/users', { supervisor: takeEvery }, function*(ctx, next) {
-  yield* next();
-  if (!ctx.json.ok) {
-    return;
-  }
-  yield* put(addUsers(ctx.json.data));
-});
+export const fetchUsers = api.get<never, User[]>(
+  '/users',
+  { supervisor: takeEvery },
+  function*(ctx, next) {
+    yield* next();
+    if (!ctx.json.ok) {
+      return;
+    }
+    yield* put(addUsers(ctx.json.data));
+  },
+);

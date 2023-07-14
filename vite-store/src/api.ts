@@ -1,5 +1,5 @@
 import { createApi, fetcher, requestMonitor } from "starfx";
-import { createSelector, updateStore } from 'starfx/store';
+import { createSelector, updateStore, takeEvery } from 'starfx/store';
 import { AppState, User } from "./types";
 
 export const api = createApi();
@@ -24,10 +24,14 @@ const addUsers = (umap: User[]) => (state: AppState) => {
   });
 }
 
-export const fetchUsers = api.get<never, User[]>('/users', function*(ctx, next) {
-  yield* next();
-  if (!ctx.json.ok) {
-    return;
-  }
-  yield* updateStore(addUsers(ctx.json.data));
-});
+export const fetchUsers = api.get<never, User[]>(
+  '/users',
+  { supervisor: takeEvery },
+  function*(ctx, next) {
+    yield* next();
+    if (!ctx.json.ok) {
+      return;
+    }
+    yield* updateStore(addUsers(ctx.json.data));
+  },
+);
