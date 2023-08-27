@@ -17,7 +17,7 @@ async function init() {
     users: { 1: { id: "1", name: "eric" } },
     ...createQueryState(),
   };
-  const store = await configureStore({
+  const store = configureStore({
     initialState,
     middleware: [
       function* logger(ctx, next) {
