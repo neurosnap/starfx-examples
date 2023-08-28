@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { configureStore } from '@reduxjs/toolkit';
 
 import { parallel, createQueryState } from "starfx";
-import { configureStore, take } from "starfx/redux";
+import { prepareStore, take } from "starfx/redux";
 import { Provider } from 'starfx/react';
 
 import { api, userReducer } from "./api.ts";
@@ -17,11 +18,16 @@ async function init() {
     users: { 1: { id: "1", name: "eric" } },
     ...createQueryState(),
   };
-  const { store, fx } = configureStore({
-    initialState,
+  const { fx, reducer } = prepareStore({
     reducers: {
       users: userReducer as any,
-    },
+    }
+  });
+  const store = configureStore({
+    preloadedState: initialState,
+    reducer,
+    // reduxjs/toolkit is in flux with its middleware types
+    middleware: (mdw) => mdw().concat(fx.middleware as any),
   });
   (window as any).reduxStore = store;
 
