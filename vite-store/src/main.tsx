@@ -1,24 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import { parallel, createQueryState } from "starfx";
+import { parallel } from "starfx";
 import { configureStore, take } from "starfx/store";
 import { Provider } from 'starfx/react';
 
-import { api } from "./api.ts";
+import { api, schema } from "./api.ts";
 import App from "./App.tsx";
 import "./index.css";
-import type { AppState } from "./types.ts";
 
 init().then(console.log).catch(console.error);
 
 async function init() {
-  const initialState: AppState = {
-    users: { 1: { id: "1", name: "eric" } },
-    ...createQueryState(),
-  };
   const store = configureStore({
-    initialState,
+    initialState: schema.initialState,
     middleware: [
       function* logger(ctx, next) {
         yield* next();

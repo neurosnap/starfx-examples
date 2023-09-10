@@ -1,13 +1,12 @@
 import { useDispatch, useSelector } from "starfx/react";
 
 import "./App.css";
-import { fetchUsers, selectUser, selectUserList } from "./api.ts";
-import type { AppState } from "./types.ts";
+import { AppState, fetchUsers, db } from "./api.ts";
 
 function App({ id }: { id: string }) {
   const dispatch = useDispatch();
-  const user = useSelector((s: AppState) => selectUser(s, { id }));
-  const userList = useSelector(selectUserList);
+  const user = useSelector((s: AppState) => db.users.selectById(s, { id }));
+  const userList = useSelector(db.users.selectTableAsList);
   return (
     <div>
       <div>hi there, {user.name}</div>
