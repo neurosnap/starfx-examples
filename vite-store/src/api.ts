@@ -6,16 +6,20 @@ interface User {
   name: string;
 }
 
-const emptyUser = { id: "", name: "" };
+const emptyUser: User = { id: "", name: "" };
 export const schema = createSchema({
   users: slice.table({ empty: emptyUser }),
-  cache: slice.table({}),
+  cache: slice.table(),
   loaders: slice.loader(),
 });
 export type AppState = typeof schema.initialState;
 export const db = schema.db;
 
 export const api = createApi();
+api.use(function*(ctx, next) {
+  yield* next();
+  console.log(`ctx [${ctx.name}]`, ctx);
+});
 api.use(mdw.api());
 api.use(storeMdw(db));
 api.use(api.routes());
