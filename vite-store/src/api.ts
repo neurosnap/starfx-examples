@@ -1,5 +1,5 @@
 import { createApi, mdw } from "starfx";
-import { takeEvery, storeMdw, slice, createSchema } from 'starfx/store';
+import { storeMdw, slice, createSchema } from 'starfx/store';
 
 interface User {
   id: string;
@@ -7,13 +7,12 @@ interface User {
 }
 
 const emptyUser: User = { id: "", name: "" };
-export const schema = createSchema({
+export const [schema, initialState] = createSchema({
   users: slice.table({ empty: emptyUser }),
   cache: slice.table(),
   loaders: slice.loader(),
 });
-export type AppState = typeof schema.initialState;
-export const db = schema.db;
+export type AppState = typeof initialState;
 
 export const api = createApi();
 api.use(function*(ctx, next) {
@@ -21,13 +20,12 @@ api.use(function*(ctx, next) {
   console.log(`ctx [${ctx.name}]`, ctx);
 });
 api.use(mdw.api());
-api.use(storeMdw(db));
+api.use(storeMdw.store(schema));
 api.use(api.routes());
 api.use(mdw.fetch({ baseUrl: 'https://jsonplaceholder.typicode.com' }));
 
 export const fetchUsers = api.get<never, User[]>(
   '/users',
-  { supervisor: takeEvery },
   function*(ctx, next) {
     yield* next();
 
@@ -40,6 +38,6 @@ export const fetchUsers = api.get<never, User[]>(
       return acc;
     }, {});
 
-    yield* schema.update(db.users.add(users));
+    yield* schema.update(schema.users.add(users));
   },
 );
