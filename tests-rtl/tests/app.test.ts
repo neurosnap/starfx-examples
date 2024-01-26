@@ -1,18 +1,42 @@
-import { render } from "./utils";
-import { screen } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "./utils";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
-import App from "../src/App";
+import { App } from "../src/App";
+import { fetchUsers } from "../src/api";
 
-test("loads and displays greeting", async () => {
-  // ARRANGE
+test("fetches users", async () => {
+  fetchUsers.use(function* (ctx, next) {
+    ctx.response = new Response(
+      JSON.stringify([
+        {
+          id: 1,
+          name: "Leanne Graham",
+        },
+        {
+          id: 2,
+          name: "Ervin Howell",
+        },
+      ])
+    );
+    yield* next();
+  });
+
   render(<App id="1" />);
+  expect(screen.getByRole("heading")).toHaveTextContent("hi there");
 
-  // ACT
-  await userEvent.click(screen.getByText("Load Greeting"));
-  await screen.findByRole("heading");
+  const btn = await screen.findByRole("button", { name: /Fetch users/ });
+  fireEvent.click(btn);
 
-  // ASSERT
-  expect(screen.getByRole("heading")).toHaveTextContent("hello there");
-  expect(screen.getByRole("button")).toBeDisabled();
+  await waitFor(
+    () => {
+      expect(screen.getByText("Leanne Graham")).toBeInTheDocument();
+    },
+    { timeout: 4000 }
+  );
+  await waitFor(
+    () => {
+      expect(screen.getByText("Ervin Howell")).toBeInTheDocument();
+    },
+    { timeout: 4000 }
+  );
 });
