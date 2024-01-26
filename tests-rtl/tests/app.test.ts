@@ -1,3 +1,4 @@
+import { expect, test } from "@jest/globals";
 import { render, screen, fireEvent, waitFor } from "./utils";
 import userEvent from "@testing-library/user-event";
 import { App } from "../src/app";
@@ -26,15 +27,16 @@ test("fetches users", async () => {
   });
 
   render(<App id="1" />);
+
   expect(screen.getByRole("heading")).toHaveTextContent("hi there");
 
   const btn = await screen.findByRole("button", { name: /Fetch users/ });
   fireEvent.click(btn);
 
   await waitFor(() => {
-    expect(screen.getByText("Leanne Graham")).toBeInTheDocument();
+    expect(screen.getByText("(1) Leanne Graham")).toBeInTheDocument();
   });
   await waitFor(() => {
-    expect(screen.getByText("Ervin Howell")).toBeInTheDocument();
+    expect(screen.getByText("(2) Ervin Howell")).toBeInTheDocument();
   });
 });
