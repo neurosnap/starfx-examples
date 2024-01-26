@@ -1,4 +1,4 @@
-import { initialState as schemaInitialState } from "./api";
+import { initialState as schemaInitialState, api } from "./api";
 import { LogContext, each, log, parallel, take } from "starfx";
 import { configureStore } from "starfx/store";
 
@@ -9,8 +9,6 @@ export function setupStore({ initialState = {} }) {
       ...initialState,
     },
   });
-
-  const tsks = [];
 
   store.run(api.bootup);
 
