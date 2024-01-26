@@ -12,10 +12,7 @@ export function setupStore({ initialState = {} }) {
 
   const tsks = [];
 
-  store.run(function* () {
-    const group = yield* parallel(tsks);
-    yield* group;
-  });
+  store.run(api.bootup);
 
   return store;
 }
