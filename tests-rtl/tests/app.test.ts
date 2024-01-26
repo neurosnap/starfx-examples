@@ -9,21 +9,21 @@ test("loads homepage", async () => {
 });
 
 test("fetches users", async () => {
-  // fetchUsers.use(function* (ctx, next) {
-  //   ctx.response = new Response(
-  //     JSON.stringify([
-  //       {
-  //         id: 1,
-  //         name: "Leanne Graham",
-  //       },
-  //       {
-  //         id: 2,
-  //         name: "Ervin Howell",
-  //       },
-  //     ])
-  //   );
-  //   yield* next();
-  // });
+  fetchUsers.use(function* (ctx, next) {
+    ctx.response = new Response(
+      JSON.stringify([
+        {
+          id: 1,
+          name: "Leanne Graham",
+        },
+        {
+          id: 2,
+          name: "Ervin Howell",
+        },
+      ])
+    );
+    yield* next();
+  });
 
   render(<App id="1" />);
   expect(screen.getByRole("heading")).toHaveTextContent("hi there");
