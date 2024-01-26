@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "./utils";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
-import { App } from "../src/App";
+import { App } from "../src/app";
 import { fetchUsers } from "../src/api";
 
 test("fetches users", async () => {
