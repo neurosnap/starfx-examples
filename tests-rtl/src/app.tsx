@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "starfx/react";
-import { fetchUsers, schema } from "./api.js";
+import { fetchUsers, schema } from "./api";
 
 export function App({ id }) {
   const dispatch = useDispatch();
