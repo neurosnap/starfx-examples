@@ -9,16 +9,8 @@ import { App } from "./app.jsx";
 init();
 
 function init() {
-  const store = configureStore({
-    initialState,
-    middleware: [
-      function* logger(ctx, next) {
-        yield* next();
-        console.log("store updater", ctx);
-      },
-    ],
-  });
-  window.store = store;
+  const store = configureStore({ initialState });
+  window.fx = store;
 
   store.run(function* () {
     const group = yield* parallel([
