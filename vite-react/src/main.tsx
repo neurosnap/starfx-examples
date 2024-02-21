@@ -10,15 +10,7 @@ import "./index.css";
 init();
 
 function init() {
-  const store = configureStore({
-    initialState,
-    middleware: [
-      function* logger(ctx, next) {
-        yield* next();
-        console.log("store updater", ctx);
-      },
-    ],
-  });
+  const store = configureStore({ initialState });
   // makes `fx` available in devtools
   (window as any).fx = store;
 

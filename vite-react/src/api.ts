@@ -15,10 +15,6 @@ export const [schema, initialState] = createSchema({
 export type AppState = typeof initialState;
 
 export const api = createApi();
-api.use(function*(ctx, next) {
-  yield* next();
-  console.log(`ctx [${ctx.name}]`, ctx);
-});
 api.use(mdw.api());
 api.use(storeMdw.store(schema));
 api.use(api.routes());
