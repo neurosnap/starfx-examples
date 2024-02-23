@@ -10,7 +10,7 @@ const emptyUser: User = { id: "", name: "" };
 export const [schema, initialState] = createSchema({
   users: slice.table({ empty: emptyUser }),
   cache: slice.table(),
-  loaders: slice.loader(),
+  loaders: slice.loaders(),
 });
 export type AppState = typeof initialState;
 
