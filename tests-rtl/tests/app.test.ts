@@ -1,6 +1,7 @@
 import { expect, test } from "@jest/globals";
 import { fireEvent, render, screen, waitFor } from "./utils";
 import { fetchUsers } from "../src/api";
+import { App } from "../src/app";
 
 test("loads homepage", async () => {
   render(<App id="1" />);
