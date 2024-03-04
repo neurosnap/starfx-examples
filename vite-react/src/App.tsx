@@ -1,4 +1,8 @@
-import { useDispatch, useSelector as useSel, TypedUseSelectorHook } from "starfx/react";
+import {
+  TypedUseSelectorHook,
+  useDispatch,
+  useSelector as useSel,
+} from "starfx/react";
 import "./App.css";
 import { AppState, fetchUsers, schema } from "./api.ts";
 
@@ -13,7 +17,7 @@ function App({ id }: { id: string }) {
       <div>hi there, {user.name}</div>
       <button onClick={() => dispatch(fetchUsers())}>Fetch users</button>
       {userList.map((u) => {
-        return <div key={u.id}>({u.id}) {u.name}</div>
+        return <div key={u.id}>({u.id}) {u.name}</div>;
       })}
     </div>
   );

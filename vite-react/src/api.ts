@@ -1,5 +1,4 @@
-import { createApi, mdw } from "starfx";
-import { storeMdw, slice, createSchema } from 'starfx/store';
+import { createApi, createSchema, mdw, slice } from "starfx";
 
 interface User {
   id: string;
@@ -15,14 +14,13 @@ export const [schema, initialState] = createSchema({
 export type AppState = typeof initialState;
 
 export const api = createApi();
-api.use(mdw.api());
-api.use(storeMdw.store(schema));
+api.use(mdw.api({ schema }));
 api.use(api.routes());
-api.use(mdw.fetch({ baseUrl: 'https://jsonplaceholder.typicode.com' }));
+api.use(mdw.fetch({ baseUrl: "https://jsonplaceholder.typicode.com" }));
 
 export const fetchUsers = api.get<never, User[]>(
-  '/users',
-  function*(ctx, next) {
+  "/users",
+  function* (ctx, next) {
     yield* next();
 
     if (!ctx.json.ok) {

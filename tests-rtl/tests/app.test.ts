@@ -1,7 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { render, screen, fireEvent, waitFor } from "./utils";
-import userEvent from "@testing-library/user-event";
-import { App } from "../src/app";
+import { fireEvent, render, screen, waitFor } from "./utils";
 import { fetchUsers } from "../src/api";
 
 test("loads homepage", async () => {
@@ -21,7 +19,7 @@ test("fetches users", async () => {
           id: 2,
           name: "Ervin Howell",
         },
-      ])
+      ]),
     );
     yield* next();
   });

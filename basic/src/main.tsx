@@ -1,42 +1,46 @@
 import ReactDOM from "react-dom/client";
-import { createApi, mdw, timer } from "starfx";
-import { configureStore, createSchema, slice, storeMdw } from "starfx/store";
+import { createApi, createSchema, createStore, mdw, timer } from "starfx";
 import { Provider, useCache } from "starfx/react";
 
-const [schema, initialState] = createSchema({
-  loaders: slice.loaders(),
-  cache: slice.table(),
-});
+const [schema, initialState] = createSchema();
+const store = createStore({ initialState });
 
 const api = createApi();
-api.use(mdw.api());
-api.use(storeMdw.store(schema));
+// mdw = middleware
+api.use(mdw.api({ schema }));
 api.use(api.routes());
-api.use(mdw.fetch({ baseUrl: "https://jsonplaceholder.typicode.com" }));
+api.use(mdw.fetch({ baseUrl: "https://api.github.com" }));
 
-const fetchUsers = api.get<never, {id: string, name: string}[]>(
-  "/users",
+const fetchRepo = api.get(
+  "/repos/neurosnap/starfx",
   { supervisor: timer() },
   api.cache(),
 );
 
-const store = configureStore({ initialState });
-// type WebState = typeof initialState;
-
 store.run(api.bootup);
 
 function App() {
-  const { isLoading, data: users } = useCache(fetchUsers());
+  return (
+    <Provider schema={schema} store={store}>
+      <Example />
+    </Provider>
+  );
+}
 
-  if (isLoading) {
-    return <div>Loading ...</div>;
-  }
+function Example() {
+  const { isLoading, isError, message, data } = useCache(fetchRepo());
+
+  if (isLoading || !data) return "Loading ...";
+
+  if (isError) return `An error has occurred: ${message}`;
 
   return (
     <div>
-      {users?.map(
-        (user) => <div key={user.id}>{user.name}</div>,
-      )}
+      <h1>{data.name}</h1>
+      <p>{data.description}</p>
+      <strong>👀 {data.subscribers_count}</strong>{" "}
+      <strong>✨ {data.stargazers_count}</strong>{" "}
+      <strong>🍴 {data.forks_count}</strong>
     </div>
   );
 }
