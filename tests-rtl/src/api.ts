@@ -8,10 +8,6 @@ export const [schema, initialState] = createSchema({
 });
 
 export const api = createApi();
-api.use(function* (ctx, next) {
-  yield* next();
-  console.log(`ctx [${ctx.name}]`, ctx);
-});
 api.use(mdw.api({ schema }));
 api.use(api.routes());
 api.use(mdw.fetch({ baseUrl: "https://jsonplaceholder.typicode.com" }));

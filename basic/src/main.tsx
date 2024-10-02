@@ -17,7 +17,7 @@ const fetchRepo = api.get(
   api.cache(),
 );
 
-store.run(api.bootup);
+store.run(api.register);
 
 function App() {
   return (

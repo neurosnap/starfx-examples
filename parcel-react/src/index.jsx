@@ -18,7 +18,7 @@ function init() {
         console.log("action", action);
       }
     },
-    api.bootup,
+    api.register,
   ]);
 
   ReactDOM.createRoot(document.getElementById("root")).render(
