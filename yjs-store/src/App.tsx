@@ -1,14 +1,22 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "starfx/react";
-import { addUser, rawUsers } from "./store/users";
+import { useState } from 'react';
+import { useY } from 'react-yjs';
+import { useDispatch, useSelector } from 'starfx/react';
 
-import "./App.css";
+import './App.css';
+import { schema } from './store/schema';
+import { addUser, rawUsers } from './store/users';
 
 function App({ id }: { id: string }) {
   const dispatch = useDispatch();
   const [text, setText] = useState("");
-  const all = useSelector(rawUsers);
-  // const userList = useSelector(schema.users.selectTableAsList);
+  // const all = useSelector(rawUsers);
+
+  //we have to subscribe to the yjs store.
+  // we could useExternalStore to do this
+  const all2 = useY(schema.users);
+  
+  
+
   return (
     <div>
       <div className="input-container">
@@ -25,13 +33,18 @@ function App({ id }: { id: string }) {
           className="text-input"
         />
         <button
-          onClick={() => dispatch(addUser(text))}
-          className="submit-button"
+          type="button"
+          onClick={() =>{dispatch(addUser(text))}}
+          // className="submit-button"
         >
           Submit
         </button>
       </div>
-      <pre>{JSON.stringify(all, null, 2)}</pre>
+      <pre>{JSON.stringify(all2)}</pre>
+      
+      
+      {/* <pre>{JSON.stringify(all, null, 2)}</pre> */}
+      {/* <pre>{JSON.stringify(all2, null, 2)}</pre> */}
       {/* <div>hi there, {user.name}</div> */}
       {/* <button onClick={() => dispatch(fetchUsers())}>Fetch users</button>
       {userList.map((u) => {

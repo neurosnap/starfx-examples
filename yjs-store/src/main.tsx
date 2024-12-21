@@ -1,13 +1,14 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { createStore, take } from "starfx";
-import { Provider } from "starfx/react";
-import App from "./App.tsx";
-import * as Y from "yjs";
-import { thunks } from "./store/foundation.ts";
-import { initialState, schema } from "./store/schema.ts";
+import './index.css';
 
-import "./index.css";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { createStore, take } from 'starfx';
+import { Provider } from 'starfx/react';
+import * as Y from 'yjs';
+
+import App from './App.tsx';
+import { thunks } from './store/foundation.ts';
+import { initialState, schema } from './store/schema.ts';
 
 init();
 
@@ -31,7 +32,6 @@ function init() {
   };
   const store = createStore({
     initialState: initialState,
-    determineNextState: yjsProduceNextState,
   });
   // makes `fx` available in devtools
   (window as any).fx = store;

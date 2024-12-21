@@ -12,6 +12,7 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-yjs": "^2.0.1",
     "starfx": "^0.13.4",
     "yjs": "^13.6.20"
   },
