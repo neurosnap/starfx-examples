@@ -9,13 +9,12 @@ import { addUser, rawUsers } from './store/users';
 function App({ id }: { id: string }) {
   const dispatch = useDispatch();
   const [text, setText] = useState("");
-  // const all = useSelector(rawUsers);
 
-  //we have to subscribe to the yjs store.
+  // const all = useSelector(rawUsers);
+  // we have to subscribe to the yjs store.
   // we could useExternalStore to do this
+
   const all2 = useY(schema.users);
-  
-  
 
   return (
     <div>

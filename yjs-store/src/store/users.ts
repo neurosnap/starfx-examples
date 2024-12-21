@@ -39,14 +39,11 @@ function createYSelector<T, R>(yMap: Y.Map<T>, mapFn: (state: Record<string, T>)
   return selector;
 }
 
-
-
 export const addUser = thunks.create<string>(
   "user:add", 
   function* (ctx, next) {
+  
   yield*  call(schema.users.set('boopK', ctx.payload)); 
-  // const users = yield* select(schema.users.select);
-  // console.log('users', users)
   yield* next();
 });
 
@@ -78,10 +75,13 @@ export const rawUsers_ = createSelector(
 );
 
 
-export const rawUsers = createYSelector(schema.users, (users) => {});
+export const rawUsers = createYSelector(schema.users, (users) => {
+  console.log('users', users)
+  return users;
+});
 
 
-export function lruMemoize(func, equalityCheckOrOptions) {
+export function lruMemoize(func:any, equalityCheckOrOptions:any) {
   let resultsCount = 0;
 
   function memoized() {
