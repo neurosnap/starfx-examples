@@ -1,0 +1,54 @@
+diff --git a/node_modules/starfx/esm/query/api.js b/node_modules/starfx/esm/query/api.js
+index aee53d8..284e0ff 100644
+--- a/node_modules/starfx/esm/query/api.js
++++ b/node_modules/starfx/esm/query/api.js
+@@ -52,6 +52,7 @@ export function createApi(baseThunk) {
+     };
+     return {
+         use: thunks.use,
++        manage: thunks.manage,
+         /**
+          * @deprecated use `register()` instead
+          */
+diff --git a/node_modules/starfx/esm/query/thunk.d.ts b/node_modules/starfx/esm/query/thunk.d.ts
+index b814f9c..e1a8b89 100644
+--- a/node_modules/starfx/esm/query/thunk.d.ts
++++ b/node_modules/starfx/esm/query/thunk.d.ts
+@@ -3,6 +3,7 @@ import type { Payload } from "../types.js";
+ import type { CreateAction, CreateActionWithPayload, Middleware, MiddlewareCo, Supervisor, ThunkCtx } from "./types.js";
+ export interface ThunksApi<Ctx extends ThunkCtx> {
+     use: (fn: Middleware<Ctx>) => void;
++    manage: (key:string,fn: any) => void;
+     routes: () => Middleware<Ctx>;
+     bootup: Callable<void>;
+     register: Callable<void>;
+diff --git a/node_modules/starfx/esm/query/thunk.js b/node_modules/starfx/esm/query/thunk.js
+index 2151b0c..3622d5b 100644
+--- a/node_modules/starfx/esm/query/thunk.js
++++ b/node_modules/starfx/esm/query/thunk.js
+@@ -46,6 +46,7 @@ export function createThunks({ supervisor = takeEvery, } = { supervisor: takeEve
+     const middleware = [];
+     const visors = {};
+     const middlewareMap = {};
++    const resourceMap = {};
+     let dynamicMiddlewareMap = {};
+     const actionMap = {};
+     const thunkId = id++;
+@@ -61,6 +62,7 @@ export function createThunks({ supervisor = takeEvery, } = { supervisor: takeEve
+             action,
+             name,
+             key,
++            resources: resourceMap,
+             payload: options,
+             actionFn,
+             result: Ok(undefined),
+@@ -184,6 +186,9 @@ export function createThunks({ supervisor = takeEvery, } = { supervisor: takeEve
+         use: (fn) => {
+             middleware.push(fn);
+         },
++        manage: (key, fn) => {
++            resourceMap[key] = fn
++        },
+         create,
+         routes,
+         /**
